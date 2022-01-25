@@ -6,6 +6,8 @@ import (
 	"os"
 	"regexp"
 
+	"stratum/internal"
+
 	"github.com/elazarl/goproxy"
 )
 
@@ -22,20 +24,19 @@ func main() {
 	proxy.OnResponse().DoFunc(func(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
 		// short circuit non 200 codes
 		if resp == nil || resp.StatusCode != 200 || ctx.UserData == nil {
-			goto RETURN
+			return resp
 		}
 
 		if ctx.UserData.(string) != "" {
 			filename := "workdir/" + ctx.UserData.(string)
 			f, err := os.Open(filename)
 			if err != nil {
-				resp.Body = NewTeeReadCloser(resp.Body, NewFileStream(filename))
+				resp.Body = internal.NewTeeReadCloser(resp.Body, internal.NewFileStream(filename))
 			} else {
 				ctx.Logf("READING FROM CACHE: %s", filename)
 				resp.Body = f
 			}
 		}
-	RETURN:
 		return resp
 	})
 	proxy.Verbose = true
