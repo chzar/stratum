@@ -8,20 +8,22 @@ import (
 
 	"stratum/internal"
 
-	"github.com/elazarl/goproxy"
+	gp "github.com/elazarl/goproxy"
 )
+
+var StratumMitmConnect = gp.ConnectAction{Action: gp.ConnectMitm, TLSConfig: gp.TLSConfigFromCA(&gp.GoproxyCa)}
 
 func main() {
 	re := regexp.MustCompile("production.cloudflare.docker.com:443/registry-v2/docker/registry/v2/blobs/sha256/.+/(.+)/.*")
 
-	proxy := goproxy.NewProxyHttpServer()
-	proxy.OnRequest(goproxy.DstHostIs("production.cloudflare.docker.com:443")).HandleConnect(goproxy.AlwaysMitm)
-	proxy.OnRequest(goproxy.UrlMatches(re)).DoFunc(func(req *http.Request, ctx *goproxy.ProxyCtx) (*http.Request, *http.Response) {
+	proxy := gp.NewProxyHttpServer()
+	proxy.OnRequest(gp.DstHostIs("production.cloudflare.docker.com:443")).HandleConnect(gp.AlwaysMitm)
+	proxy.OnRequest(gp.UrlMatches(re)).DoFunc(func(req *http.Request, ctx *gp.ProxyCtx) (*http.Request, *http.Response) {
 		ctx.UserData = re.FindStringSubmatch(req.URL.String())[1]
 		return req, nil
 	})
 
-	proxy.OnResponse().DoFunc(func(resp *http.Response, ctx *goproxy.ProxyCtx) *http.Response {
+	proxy.OnResponse().DoFunc(func(resp *http.Response, ctx *gp.ProxyCtx) *http.Response {
 		// short circuit non 200 codes
 		if resp == nil || resp.StatusCode != 200 || ctx.UserData == nil {
 			return resp
