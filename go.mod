@@ -1,6 +1,6 @@
 module stratum/m/v2
 
-go 1.16
+go 1.17
 
 replace "stratum/internal" => "./internal"
 require "stratum/internal" "v0.0.0"
