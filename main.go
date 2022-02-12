@@ -6,7 +6,7 @@ import (
 	"os"
 	"regexp"
 
-	"stratum/internal"
+	"github.com/chzar/stratum/v2/internal"
 
 	gp "github.com/elazarl/goproxy"
 )

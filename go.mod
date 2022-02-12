@@ -1,8 +1,5 @@
-module stratum/m/v2
+module github.com/chzar/stratum/v2
 
 go 1.17
 
-replace "stratum/internal" => "./internal"
-require "stratum/internal" "v0.0.0"
-
-require github.com/elazarl/goproxy v0.0.0-20210801061803-8e322dfb79c4
+require github.com/elazarl/goproxy v0.0.0-20220115173737-adb46da277ac
