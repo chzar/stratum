@@ -92,6 +92,18 @@ cj/azKBaT04IOMLaN8xfSqitJYSraWMVNgGJM5vfcVaivZnNh0lZBv+qu6YkdM88
 4/avCJ8IutT+FcMM+GbGazOm5ALWqUyhrnbLGc4CQMPfe7Il6NxwcrOxT8w=
 -----END RSA PRIVATE KEY-----`)
 
+type ServerConfigRaw struct {
+	CACertPath     string
+	CAKeyPath      string
+	ServerCertPath string
+	ServerKeyPath  string
+	UrlPatterns    []string
+}
+
+func LoadServerConfigFromFile(path string) (*ServerConfigRaw, error) {
+	return nil, nil
+}
+
 type ServerConfig struct {
 	Hosts       []string
 	UrlPatterns []*regexp.Regexp
