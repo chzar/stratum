@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"log"
 	"net/http"
 	"os"
 
@@ -46,6 +45,5 @@ func BuildServer(c *ServerConfig) (*gp.ProxyHttpServer, error) {
 		return resp
 	})
 	proxy.Verbose = true
-	log.Fatal(http.ListenAndServeTLS(":9443", "server.crt", "server.key", proxy))
 	return new(gp.ProxyHttpServer), nil
 }

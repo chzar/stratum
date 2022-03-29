@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"net/http"
 
 	"github.com/chzar/stratum/v2/internal"
 )
@@ -10,5 +9,6 @@ import (
 func main() {
 	c := internal.LoadServerConfig()
 	proxy, _ := internal.BuildServer(c)
-	log.Fatal(http.ListenAndServeTLS(":9443", "server.crt", "server.key", proxy))
+	println("Starting Server...")
+	log.Fatal(internal.ListenAndServeTLS(":9443", *c.CACert, proxy))
 }
