@@ -10,5 +10,5 @@ import (
 func main() {
 	proxy := goproxy.NewProxyHttpServer()
 	proxy.Verbose = true
-	log.Fatal(http.ListenAndServeTLS(":8080", "myserver.crt", "myserver.key", proxy))
+	log.Fatal(http.ListenAndServeTLS(":9443", "myserver.crt", "myserver.key", proxy))
 }
