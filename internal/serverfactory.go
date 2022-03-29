@@ -45,5 +45,5 @@ func BuildServer(c *ServerConfig) (*gp.ProxyHttpServer, error) {
 		return resp
 	})
 	proxy.Verbose = true
-	return new(gp.ProxyHttpServer), nil
+	return proxy, nil
 }
