@@ -2,13 +2,13 @@ package main
 
 import (
 	"log"
+	"net/http"
 
-	"github.com/chzar/stratum/v2/internal"
+	"github.com/elazarl/goproxy"
 )
 
 func main() {
-	c := internal.LoadServerConfig()
-	proxy, _ := internal.BuildServer(c)
-	println("Starting Server...")
-	log.Fatal(internal.ListenAndServeTLS(":9443", *c.CACert, proxy))
+	proxy := goproxy.NewProxyHttpServer()
+	proxy.Verbose = true
+	log.Fatal(http.ListenAndServeTLS(":8080", "myserver.crt", "myserver.key", proxy))
 }
