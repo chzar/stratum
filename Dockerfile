@@ -14,4 +14,4 @@ RUN go build -v -o /usr/local/bin/stratum main.go
 RUN addgroup -S stratum && adduser -S stratum -G stratum
 USER stratum
 
-CMD ["stratum"]
+ENTRYPOINT ["stratum"]
