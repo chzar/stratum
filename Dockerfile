@@ -10,7 +10,6 @@ RUN go mod download && go mod verify
 
 COPY . .
 RUN go build -v -o /usr/local/bin/stratum main.go
-RUN mkdir /usr/local/bin/workdir
 
 RUN addgroup -S stratum && adduser -S stratum -G stratum
 USER stratum

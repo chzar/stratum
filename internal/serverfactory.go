@@ -33,7 +33,7 @@ func BuildServer(c *ServerConfig) (*gp.ProxyHttpServer, error) {
 		}
 
 		if ctx.UserData.(string) != "" {
-			filename := "workdir/" + ctx.UserData.(string)
+			filename := "/tmp/" + ctx.UserData.(string)
 			f, err := os.Open(filename)
 			if err != nil {
 				resp.Body = NewTeeReadCloser(resp.Body, NewFileStream(filename))
