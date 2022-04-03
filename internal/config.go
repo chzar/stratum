@@ -196,7 +196,7 @@ type ServerConfig struct {
 }
 
 func LoadServerConfig() *ServerConfig {
-	caCert, _ := tls.X509KeyPair(SERVER_CERT, SERVER_KEY)
+	caCert, _ := tls.X509KeyPair(CA_CERT, CA_KEY)
 	re := regexp.MustCompile("production.cloudflare.docker.com:443/registry-v2/docker/registry/v2/blobs/sha256/.+/(.+)/.*")
 	return &ServerConfig{
 		Hosts: []string{
