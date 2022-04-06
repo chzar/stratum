@@ -2,6 +2,8 @@ package internal
 
 import (
 	"crypto/tls"
+	"encoding/json"
+	"io/ioutil"
 	"regexp"
 )
 
@@ -178,15 +180,25 @@ cj/azKBaT04IOMLaN8xfSqitJYSraWMVNgGJM5vfcVaivZnNh0lZBv+qu6YkdM88
 -----END RSA PRIVATE KEY-----`)
 
 type ServerConfigRaw struct {
-	CACertPath     string
-	CAKeyPath      string
-	ServerCertPath string
-	ServerKeyPath  string
-	UrlPatterns    []string
+	CertificatePath    string   `json:"certificatePath"`
+	CertificateKeyPath string   `json:"certificateKeyPath"`
+	UrlPatterns        []string `json:"urlPatterns"`
 }
 
-func LoadServerConfigFromFile(path string) (*ServerConfigRaw, error) {
-	return nil, nil
+func LoadServerConfigFromFile(path string) (*ServerConfig, error) {
+	config := new(ServerConfigRaw)
+
+	configData, err := ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(configData, config)
+	if err != nil {
+		return nil, err
+	}
+
+	return LoadServerConfig(config)
 }
 
 type ServerConfig struct {
@@ -195,8 +207,18 @@ type ServerConfig struct {
 	CACert      *tls.Certificate
 }
 
-func LoadServerConfig() *ServerConfig {
-	caCert, _ := tls.X509KeyPair(CA_CERT, CA_KEY)
+func LoadServerConfig(rawConfig *ServerConfigRaw) (*ServerConfig, error) {
+	certData, err := ioutil.ReadFile(rawConfig.CertificatePath)
+	if err != nil {
+		return nil, err
+	}
+
+	keyData, err := ioutil.ReadFile(rawConfig.CertificateKeyPath)
+	if err != nil {
+		return nil, err
+	}
+
+	caCert, _ := tls.X509KeyPair(certData, keyData)
 	re := regexp.MustCompile("production.cloudflare.docker.com:443/registry-v2/docker/registry/v2/blobs/sha256/.+/(.+)/.*")
 	return &ServerConfig{
 		Hosts: []string{
@@ -206,5 +228,5 @@ func LoadServerConfig() *ServerConfig {
 			re,
 		},
 		CACert: &caCert,
-	}
+	}, nil
 }
