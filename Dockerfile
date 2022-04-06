@@ -14,4 +14,6 @@ RUN go build -v -o /usr/local/bin/stratum main.go
 RUN addgroup -S stratum && adduser -S stratum -G stratum
 USER stratum
 
-ENTRYPOINT ["stratum"]
+RUN mkdir /config
+
+ENTRYPOINT ["stratum", "/config/server.json"]
