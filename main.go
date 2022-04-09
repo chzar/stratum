@@ -9,6 +9,7 @@ import (
 
 func main() {
 	c, err := internal.LoadServerConfigFromFile(os.Args[1])
+	log.Default().Printf("Loading %s", os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}
