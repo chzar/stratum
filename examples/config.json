@@ -1,6 +1,6 @@
 {
-	"certificatePath": "",
-	"certificateKeyPath": "",
+	"certificatePath": "/home/chzar/source/stratum/tls/ca.crt",
+	"certificateKeyPath": "/home/chzar/source/stratum/tls/ca.key",
 	"urlPatterns": [
 		"",
 		""
