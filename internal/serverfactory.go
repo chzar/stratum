@@ -35,9 +35,11 @@ func BuildServer(c *ServerConfig) (*gp.ProxyHttpServer, error) {
 		if ctx.UserData.(string) != "" {
 			filename := "/tmp/" + ctx.UserData.(string)
 			f, err := os.Open(filename)
+
+			// file does not exist, so copy the resp as we write it back to the client
 			if err != nil {
 				resp.Body = NewTeeReadCloser(resp.Body, NewFileStream(filename))
-			} else {
+			} else { // file exists in cache
 				ctx.Logf("READING FROM CACHE: %s", filename)
 				resp.Body = f
 			}
