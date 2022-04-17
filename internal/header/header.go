@@ -88,5 +88,5 @@ func NewFromIO(r io.Reader) (*header, error) {
 }
 
 func (h *header) String() string {
-	fmt.Printf("Status: %d, Expiry: %s", h.Status, h.Expiry)
+	return fmt.Sprintf("Status: %d, Expiry: %s", h.Status, h.Expiry)
 }
