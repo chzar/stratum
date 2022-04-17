@@ -33,9 +33,14 @@ func responseHandler(resp *http.Response, ctx *gp.ProxyCtx, c *ServerConfig) *ht
 			resp.Body = NewTeeReadCloser(resp.Body, NewFileStream(filename))
 		} else { // file exists in cache
 			ctx.Logf("READING FROM CACHE: %s", filename)
-			header.NewFromIO(f)
+			h, err := header.NewFromIO(f)
+			if err != nil {
+				goto X
+			}
+			ctx.Logf("Parsed Header: %s", h)
 			resp.Body = f
 		}
 	}
+X:
 	return resp
 }

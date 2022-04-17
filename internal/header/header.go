@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/gob"
+	"fmt"
 	"io"
 	"time"
 )
@@ -84,4 +85,8 @@ func NewFromIO(r io.Reader) (*header, error) {
 	}
 
 	return Deserialize(bytes.NewReader(hBytes))
+}
+
+func (h *header) String() string {
+	fmt.Printf("Status: %d, Expiry: %s", h.Status, h.Expiry)
 }
