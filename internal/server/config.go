@@ -1,4 +1,4 @@
-package internal
+package server
 
 import (
 	"crypto/tls"
@@ -182,6 +182,7 @@ cj/azKBaT04IOMLaN8xfSqitJYSraWMVNgGJM5vfcVaivZnNh0lZBv+qu6YkdM88
 type ServerConfigRaw struct {
 	CertificatePath    string   `json:"certificatePath"`
 	CertificateKeyPath string   `json:"certificateKeyPath"`
+	LayersPath         string   `json:"layersPath"`
 	UrlPatterns        []string `json:"urlPatterns"`
 }
 
@@ -205,6 +206,7 @@ type ServerConfig struct {
 	Hosts       []string
 	UrlPatterns []*regexp.Regexp
 	CACert      *tls.Certificate
+	LayersPath  string
 }
 
 func LoadServerConfig(rawConfig *ServerConfigRaw) (*ServerConfig, error) {
@@ -227,6 +229,7 @@ func LoadServerConfig(rawConfig *ServerConfigRaw) (*ServerConfig, error) {
 		UrlPatterns: []*regexp.Regexp{
 			re,
 		},
-		CACert: &caCert,
+		CACert:     &caCert,
+		LayersPath: rawConfig.LayersPath,
 	}, nil
 }

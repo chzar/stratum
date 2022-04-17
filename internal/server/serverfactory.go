@@ -1,4 +1,4 @@
-package internal
+package server
 
 import (
 	"net/http"
@@ -6,7 +6,7 @@ import (
 	gp "github.com/elazarl/goproxy"
 )
 
-func BuildServer(c *ServerConfig) (*gp.ProxyHttpServer, error) {
+func NewServer(c *ServerConfig) (*gp.ProxyHttpServer, error) {
 
 	var StratumAlwaysMitm gp.FuncHttpsHandler = func(host string, ctx *gp.ProxyCtx) (*gp.ConnectAction, string) {
 		return &gp.ConnectAction{Action: gp.ConnectMitm, TLSConfig: gp.TLSConfigFromCA(c.CACert)}, host
@@ -25,7 +25,9 @@ func BuildServer(c *ServerConfig) (*gp.ProxyHttpServer, error) {
 		})
 	}
 
-	proxy.OnResponse().DoFunc(responseHandler)
+	proxy.OnResponse().DoFunc(func(resp *http.Response, ctx *gp.ProxyCtx) *http.Response {
+		return responseHandler(resp, ctx, c)
+	})
 	proxy.Verbose = true
 	return proxy, nil
 }
