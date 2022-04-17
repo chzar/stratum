@@ -11,9 +11,11 @@ RUN go mod download && go mod verify
 COPY . .
 RUN go build -v -o /usr/local/bin/stratum main.go
 
-RUN mkdir /config
-
 RUN addgroup -S stratum && adduser -S stratum -G stratum
+RUN mkdir -p /config
+RUN mkdir -p /var/lib/stratum
+RUN chown stratum:stratum /var/lib/stratum
+
 USER stratum
 
 ENTRYPOINT ["stratum", "/config/server.json"]
